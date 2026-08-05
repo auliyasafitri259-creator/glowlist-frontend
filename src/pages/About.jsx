@@ -11,5 +11,4 @@ return (
         cerah, dan terawat.</p>
     </div>
 )
-
 }
