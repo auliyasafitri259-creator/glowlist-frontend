@@ -3,6 +3,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Produk from "./pages/Produk";
 import AddProduk from "./pages/AddProduk";
+import EditProduk from "./pages/EditProduk";
 import  Kategori from "./pages/Kategori";
 import About from "./pages/About";
 
@@ -14,6 +15,7 @@ export default function App() {
       <Route index element={<Home/>}/>
       <Route path="Produk" element={<Produk/>}/>
       <Route path="produk/tambah" element={<AddProduk/>}/>
+      <Route path="produk/edit/:id" element={<EditProduk/>}/>
       <Route path="Kategori" element={<Kategori/>}/>
       <Route path="About" element={<About/>}/>
       </Route>

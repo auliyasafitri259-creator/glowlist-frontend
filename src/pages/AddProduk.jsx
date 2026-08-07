@@ -42,7 +42,7 @@ export default function AddProduk() {
                 const data = await res.json()
                 setKategori(data)
             }catch (err){
-                console.error("GAGAL MENGSNBIL KATEGORI:", err)
+                console.error("GAGAL MENGAMBIL KATEGORI:", err)
             }
         }
         getKategori()
