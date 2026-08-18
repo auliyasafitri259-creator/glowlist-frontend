@@ -7,11 +7,29 @@ import EditProduk from "./pages/EditProduk";
 import  Kategori from "./pages/Kategori";
 import About from "./pages/About";
 
+import { Navigate } from "react-router-dom";
+import Login from "./pages/login";
+
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token")
+  if (!token) {
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
+
 export default function App() {
   return (
     <BrowserRouter>
      <Routes>
-      <Route path="/" element={<Layout/>}>
+      <Route path="/login"element={<Login />} />
+
+      <Route path="/" element={
+        <ProtectedRoute>
+         <Layout/> 
+        </ProtectedRoute>
+      }
+      >
       <Route index element={<Home/>}/>
       <Route path="Produk" element={<Produk/>}/>
       <Route path="produk/tambah" element={<AddProduk/>}/>
