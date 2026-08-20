@@ -9,17 +9,34 @@ export default function AddProduk() {
         harga:"",
         id_kategori:"",
     })
+    const [file, setFile] = useState(null)
     const navigate = useNavigate();
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value})
     }
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
+
+        const data = new FormData()
+        data.append("judul", formData.judul)
+         data.append("deskripsi", formData.deskripsi)
+          data.append("harga", formData.harga)
+           data.append("id_kategori", formData.id_kategori)
+            data.append("file", file)
+        try { 
+
             const res = await fetch("http://localhost:3001/produk", {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(formData),
+                headers: { 
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: data,
             })
             if (res.ok) {
                 alert("Produk berhasil ditambahkan!");
@@ -61,6 +78,19 @@ export default function AddProduk() {
                     className="form-control" 
                     placeholder="Masukkan nama produk" 
                     required />
+                </div>
+
+                 <div className="mb-3">
+                    <label className="form-label">
+                        Foto Produk
+                    </label>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        className="form-control"
+                        onChange={(e) => setFile(e.target.files[0])}
+                    />
                 </div>
 
                 <div className="mb-3">

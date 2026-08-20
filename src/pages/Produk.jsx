@@ -28,12 +28,17 @@ export default function Produk () {
     const handleDelete = async (id) => {
         if (window.confirm("Yakin ingin menghapus produk ini?")) {
             try{
+                const token = localStorage.getItem("token");
                 const res = await fetch(`http://localhost:3001/produk/${id}`, {
                     method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                         "Content-Type": "application/json"
+                    }
                 })
                 if (res.ok) {
                     alert("Produk berhasil dihapus")
-                    getProduk(); // ambil ulang data terbaru
+                    getProduk(); 
                 } else {
                     alert("Gagal menghapus produk")
                 }
@@ -61,6 +66,7 @@ export default function Produk () {
                 <thead className="table-primary">
                     <tr>
                         <th>ID</th>
+                        <th>Foto</th>
                         <th>Judul</th>
                         <th>Deskripsi</th>
                         <th>Harga</th>
@@ -73,6 +79,18 @@ export default function Produk () {
                         produk.map((item) => (
                             <tr key={item.id_produk}>
                                 <td>{item.id_produk}</td>
+                                <td>
+                                    {item.name_file ? (
+                                        <img 
+                                        src={`http://localhost:3001/uploads/${item.name_file}`}
+                                        alt={item.judul}
+                                        width="150"
+                                        className="rounded"
+                                        />
+                                    ) : (
+                                        <span className="text-muted">Tidak ada foto</span>
+                                    )}
+                                </td>
                                 <td>{item.judul}</td>
                                 <td>{item.deskripsi}</td>
                                 <td>Rp. {item.harga}</td>

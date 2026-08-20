@@ -3,83 +3,134 @@ import { useParams, useNavigate } from "react-router-dom";
 
 export default function EditProduk() {
     const { id } = useParams();
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+
     const [formData, setFormData] = useState({
         judul: "",
         deskripsi: "",
         harga: "",
         id_kategori: "",
     })
+
+    const [fileBaru, setFileBaru] = useState(null);
     const [kategori, setKategori] = useState([]);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getData = async () => {
             try {
-                const resProduk = await fetch(`http://localhost:3001/produk/${id}`)
-                const dataProduk = await resProduk.json();
+                //Ambil data produk
+                const resProduk = await fetch(`http://localhost:3001/produk/${id}`);
+
+                const dataProduk = await resProduk.json()
                 setFormData(dataProduk[0])
 
-                const resKategori = await fetch("http://localhost:3001/kategori")
-                const dataKategori = await resKategori.json();
+                //Ambil data kategori
+                const resKategi = await fetch("http://localhost:3001/kategori");
+
+                const dataKategori = await resKategi.json()
                 setKategori(dataKategori)
 
                 setLoading(false)
-            }catch (err) {
+            } catch (err) {
                 console.error(err)
-            }
+                setLoading(false)
+            } 
         }
-        getData();
+
+        getData()
     }, [id])
-       
+
     const handleChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value})
+        setFormData({...formData, [e.target.name]: e.target.value,})
     }
 
-    const handleSubmit =async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const yakin = window.confirm("Yakin mau menyimpan perubahan ini?")
-
-        if(!yakin) {
-            return; // Batal jika pengguna menekan cancel
+        //validasi ukuran file maksimal 2 mb
+        if(fileBaru && fileBaru.size > 2 * 1024 * 1024) {
+            alert("Ukuran file terlalu besar, maksimal 2 mb")
+            return;
         }
-        await fetch(`http://localhost:3001/produk/${id}`, {
-            method: "PUT",
-            headers: {"Content-Type": "application/json" },
-            body: json.stringify(formData),
-        })
-        alert("Produk berhasil diperbarui!")
-        navigate("/produk")
-    }
-    if(loading) {
-        return <div className="container mt-4">Loading...</div>
-    }
 
+        try {
+            const data = new FormData();
+
+            data.append("judul", formData.judul)
+            data.append("deskripsi", formData.deskripsi)
+            data.append("harga", formData.harga)
+            data.append("id_kategori", formData.id_kategori)
+
+            // jika memilih foto baru 
+            if(fileBaru) {
+                data.append("name_file", fileBaru)
+            }
+
+            const response = await fetch(`http://localhost:3001/produk/${id}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: data,
+            }
+            );
+            if (!response.ok) {
+                throw new Error("Gagal memperbarui produk")
+            }
+
+            alert("Produk berhasil diperbarui")
+
+            navigate("/produk")
+        } catch (err) {
+            console.error(err)
+           alert("Gagal memperbarui produk")
+        }
+    }
+    if (loading) {
+        return <div className="container mt-4">Loading...</div>;
+    }
     return (
         <div className="container mt-4">
-            <h2>Edit Produk</h2>
-            <form onSubmit={handleSubmit} className="mt-3">
+            <h2 className="mb-3">Tambah Produk</h2>
+            <form onSubmit={handleSubmit} className="card p-4  shadow-sm">
                 <div className="mb-3">
-                    <label className="form-label">Judul</label>
-                    <input 
-                    type="text"
-                    name="judul"
-                    value={formData.judul}
-                    onChange={handleChange}
-                    className="form-control"
+                    <label className="form-label">Judul Produk</label>
+                    <input
+                    type="text" 
+                    name="judul" 
+                    value={formData.judul} 
+                    onChange={handleChange} 
+                    className="form-control" 
+                    placeholder="Masukkan nama produk" 
+                    required />
+                </div>
+
+                 <div className="mb-3">
+                    <label className="form-label">
+                        Foto Produk
+                    </label>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        className="form-control"
+                        onChange={(e) => setFileBaru(e.target.files[0])}
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Deskripsi</label>
-                    <textarea
+                    <textarea 
                     name="deskripsi"
                     value={formData.deskripsi}
                     onChange={handleChange}
                     className="form-control"
+                    placeholder="Massukkan deskripsi produk"
                     ></textarea>
                 </div>
-                <div className="mb-3">
+
+                 <div className="mb-3">
                     <label className="form-label">Harga</label>
                     <input
                     type="text" 
@@ -87,9 +138,11 @@ export default function EditProduk() {
                     value={formData.harga} 
                     onChange={handleChange} 
                     className="form-control" 
-                    />
+                    placeholder="Masukkan harga" 
+                    required />
                 </div>
-                <div className="mb-3">
+
+                 <div className="mb-3">
                     <label className="form-label">Kategori</label>
                     <select 
                     name="id_kategori" 
@@ -108,11 +161,10 @@ export default function EditProduk() {
                     ))}
                     </select>
                 </div>
-                <div className="d-flex gap-2">
-                <button type="submit" className="btn btn-success me-2">Simpan Prubahan</button>
-                <button type="button" className="btn btn-secondary me-2" onClick={() => navigate("/produk")}>Batal</button>
-                </div>
+
+                <button type="submit" className="btn btn-success">Simpan</button>
             </form>
         </div>
     )
+
 }
