@@ -41,14 +41,20 @@ export default function EditProduk() {
         getData()
     }, [id])
 
-    const handleChange = (e) => {
+    const handleChange = (e) => { 
         setFormData({...formData, [e.target.name]: e.target.value,})
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        //validasi ukuran file maksimal 2 mb
+        const yakin = window.confirm(
+            "Yakin ingin menyimpan perubahan ini"
+        )
+
+        if (!yakin) {
+            return
+        }
         if(fileBaru && fileBaru.size > 2 * 1024 * 1024) {
             alert("Ukuran file terlalu besar, maksimal 2 mb")
             return;
@@ -62,9 +68,8 @@ export default function EditProduk() {
             data.append("harga", formData.harga)
             data.append("id_kategori", formData.id_kategori)
 
-            // jika memilih foto baru 
             if(fileBaru) {
-                data.append("name_file", fileBaru)
+                data.append("name_file", fileBaru) // hanya kirim kalau ada foto baru
             }
 
             const response = await fetch(`http://localhost:3001/produk/${id}`, {
@@ -92,7 +97,7 @@ export default function EditProduk() {
     }
     return (
         <div className="container mt-4">
-            <h2 className="mb-3">Tambah Produk</h2>
+            <h2 className="mb-3">Update Produk</h2>
             <form onSubmit={handleSubmit} className="card p-4  shadow-sm">
                 <div className="mb-3">
                     <label className="form-label">Judul Produk</label>
@@ -107,15 +112,26 @@ export default function EditProduk() {
                 </div>
 
                  <div className="mb-3">
-                    <label className="form-label">
-                        Foto Produk
-                    </label>
-
+                    <label className="form-label">Foto Saat ini</label>
+                    <div>
+                        {formData.name_file ? (
+                            <img
+                            src={`http://localhost:3001/uploads/${formData.name_file}`}
+                            alt="Foto lama"
+                            style={{ width: "120px", borderRadius: "8px" }}
+                            />
+                        ) : (
+                            <p>Tidak ada foto</p>
+                        )}
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Ganti Foto (opsional)</label>
                     <input
-                        type="file"
-                        accept="image/*"
-                        className="form-control"
-                        onChange={(e) => setFileBaru(e.target.files[0])}
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                    onChange={(e) => setFileBaru(e.target.files[0])}
                     />
                 </div>
 
