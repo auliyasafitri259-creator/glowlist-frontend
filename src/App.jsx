@@ -45,7 +45,7 @@ export default function App() {
       <Route path="Keranjang" element={<Keranjang/>}/>
       <Route path="Pembayaran" element={<Pembayaran/>}/>
       <Route path="Nota" element={<Nota/>}/>
-        <Route path="Transaksi" element={<Transaksi/>}/>
+      <Route path="Transaksi" element={<Transaksi/>}/>
       </Route>
      </Routes>
     </BrowserRouter>

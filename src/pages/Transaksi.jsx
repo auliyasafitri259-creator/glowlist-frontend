@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Transaksi.css";
 
 export default function Transaksi() {
     const [transaksi, setTransaksi] = useState([]);
+    const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState("Semua");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,6 +16,12 @@ export default function Transaksi() {
     }, []);
 
     const hapusTransaksi = (id) => {
+        const yakin = window.confirm(
+            "Yakin ingin menghapus transaksi ini?"
+        );
+
+        if (!yakin) return;
+
         const dataBaru = transaksi.filter(
             (item) => item.id_transaksi !== id
         );
@@ -24,248 +33,337 @@ export default function Transaksi() {
         );
     };
 
-    const hapusSemua = () => {
-        if (transaksi.length === 0) return;
+    const totalPendapatan = transaksi.reduce(
+        (total, item) => total + Number(item.total),
+        0
+    );
 
-        const yakin = window.confirm(
-            "Yakin ingin menghapus semua transaksi?"
+    const totalProduk = transaksi.reduce(
+        (total, item) =>
+            total +
+            (item.produk || []).reduce(
+                (jumlah, produk) =>
+                    jumlah + Number(produk.jumlah),
+                0
+            ),
+        0
+    );
+
+    const transaksiFilter = transaksi.filter((item) => {
+        const teksProduk =
+            item.produk
+                ?.map((produk) => produk.judul)
+                .join(" ")
+                .toLowerCase() || "";
+
+        const cocokSearch =
+            String(item.id_transaksi)
+                .toLowerCase()
+                .includes(search.toLowerCase()) ||
+            teksProduk.includes(search.toLowerCase());
+
+        const cocokFilter =
+            filter === "Semua" || item.metode === filter;
+
+        return cocokSearch && cocokFilter;
+    });
+
+    const bukaNota = (item) => {
+        localStorage.setItem(
+            "notaTerakhir",
+            JSON.stringify(item)
         );
 
-        if (!yakin) return;
-
-        setTransaksi([]);
-        localStorage.removeItem("transaksi");
+        navigate("/nota");
     };
 
     return (
-        <div className="container mt-4 mb-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Riwayat Transaksi</h2>
+        <div className="transaksi-page">
+            <div className="transaksi-top">
+                <div>
+                    <h2>Riwayat Transaksi</h2>
+                    <p>
+                        Kelola dan lihat semua transaksi GlowList
+                    </p>
+                </div>
 
-                <div className="d-flex gap-2">
-                    <button
-                        className="btn btn-secondary"
-                        onClick={() => navigate("/produk")}
-                    >
-                        ← Produk
-                    </button>
+                <button
+                    className="btn-belanja"
+                    onClick={() => navigate("/produk")}
+                >
+                    + Belanja Lagi
+                </button>
+            </div>
 
-                    {transaksi.length > 0 && (
-                        <button
-                            className="btn btn-danger"
-                            onClick={hapusSemua}
-                        >
-                            Hapus Semua
-                        </button>
-                    )}
+            <div className="statistik">
+                <div className="stat-card">
+                    <div className="stat-icon purple">
+                        🧾
+                    </div>
+
+                    <div>
+                        <span>Total Transaksi</span>
+                        <h3>{transaksi.length}</h3>
+                    </div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-icon pink">
+                        🛍️
+                    </div>
+
+                    <div>
+                        <span>Produk Terjual</span>
+                        <h3>{totalProduk}</h3>
+                    </div>
+                </div>
+
+                <div className="stat-card">
+                    <div className="stat-icon green">
+                        💰
+                    </div>
+
+                    <div>
+                        <span>Total Pendapatan</span>
+                        <h3>
+                            Rp{" "}
+                            {totalPendapatan.toLocaleString(
+                                "id-ID"
+                            )}
+                        </h3>
+                    </div>
                 </div>
             </div>
 
-            {transaksi.length === 0 ? (
-                <div className="card">
-                    <div className="card-body text-center p-5">
-                        <h4>Belum Ada Transaksi</h4>
-                        <p className="text-muted">
-                            Belum ada riwayat transaksi yang tersimpan.
-                        </p>
+            <div className="transaksi-card">
+                <div className="table-header">
+                    <div>
+                        <h3>Daftar Transaksi</h3>
+                        <span>
+                            {transaksiFilter.length} transaksi
+                            ditemukan
+                        </span>
+                    </div>
 
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => navigate("/produk")}
+                    <div className="table-tools">
+                        <div className="search-box">
+                            <span>⌕</span>
+
+                            <input
+                                type="text"
+                                placeholder="Cari transaksi..."
+                                value={search}
+                                onChange={(e) =>
+                                    setSearch(
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </div>
+
+                        <select
+                            value={filter}
+                            onChange={(e) =>
+                                setFilter(e.target.value)
+                            }
                         >
-                            Mulai Belanja
-                        </button>
+                            <option value="Semua">
+                                Semua Metode
+                            </option>
+                            <option value="Cash">
+                                Cash
+                            </option>
+                            <option value="Transfer">
+                                Transfer
+                            </option>
+                            <option value="QRIS">
+                                QRIS
+                            </option>
+                        </select>
                     </div>
                 </div>
-            ) : (
-                transaksi.map((item) => (
-                    <div
-                        className="card mb-4 shadow-sm"
-                        key={item.id_transaksi}
-                    >
-                        <div className="card-body">
-                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    <h5 className="mb-1">
-                                        Transaksi #{item.id_transaksi}
-                                    </h5>
-                                    <small className="text-muted">
-                                        {item.tanggal}
-                                    </small>
-                                </div>
 
-                                <span className="badge bg-success">
-                                    Selesai
-                                </span>
-                            </div>
+                <div className="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No Pesanan</th>
+                                <th>Produk</th>
+                                <th>Tanggal</th>
+                                <th>Total</th>
+                                <th>Metode</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
 
-                            <div className="table-responsive">
-                                <table className="table table-bordered align-middle">
-                                    <thead className="table-light">
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Produk</th>
-                                            <th>Harga</th>
-                                            <th>Jumlah</th>
-                                            <th>Subtotal</th>
-                                        </tr>
-                                    </thead>
+                        <tbody>
+                            {transaksiFilter.length === 0 ? (
+                                <tr>
+                                    <td
+                                        colSpan="8"
+                                        className="empty"
+                                    >
+                                        <div>
+                                            <div className="empty-icon">
+                                                🧾
+                                            </div>
 
-                                    <tbody>
-                                        {item.produk &&
-                                            item.produk.map(
-                                                (produk, index) => (
-                                                    <tr
-                                                        key={
-                                                            produk.id_produk
-                                                        }
-                                                    >
-                                                        <td>
-                                                            {index + 1}
-                                                        </td>
+                                            <h4>
+                                                Belum Ada Transaksi
+                                            </h4>
 
-                                                        <td>
-                                                            <div className="d-flex align-items-center">
-                                                                {produk.name_file ? (
-                                                                    <img
-                                                                        src={`http://localhost:3001/uploads/${produk.name_file}`}
-                                                                        alt={
+                                            <p>
+                                                Transaksi yang
+                                                berhasil akan
+                                                muncul di sini.
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (
+                                transaksiFilter.map(
+                                    (item, index) => (
+                                        <tr
+                                            key={
+                                                item.id_transaksi
+                                            }
+                                        >
+                                            <td>
+                                                <span className="nomor">
+                                                    {index + 1}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <strong className="order-id">
+                                                    #
+                                                    {
+                                                        item.id_transaksi
+                                                    }
+                                                </strong>
+                                            </td>
+
+                                            <td>
+                                                <div className="produk-list">
+                                                    {item.produk
+                                                        ?.slice(
+                                                            0,
+                                                            2
+                                                        )
+                                                        .map(
+                                                            (
+                                                                produk
+                                                            ) => (
+                                                                <div
+                                                                    className="produk-item"
+                                                                    key={
+                                                                        produk.id_produk
+                                                                    }
+                                                                >
+                                                                    {produk.name_file ? (
+                                                                        <img
+                                                                            src={`http://localhost:3001/uploads/${produk.name_file}`}
+                                                                            alt={
+                                                                                produk.judul
+                                                                            }
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="no-image">
+                                                                            ✨
+                                                                        </div>
+                                                                    )}
+
+                                                                    <span>
+                                                                        {
                                                                             produk.judul
                                                                         }
-                                                                        width="55"
-                                                                        height="55"
-                                                                        style={{
-                                                                            objectFit:
-                                                                                "cover",
-                                                                            borderRadius:
-                                                                                "8px",
-                                                                            marginRight:
-                                                                                "10px"
-                                                                        }}
-                                                                    />
-                                                                ) : (
-                                                                    <div
-                                                                        className="border rounded d-flex align-items-center justify-content-center"
-                                                                        style={{
-                                                                            width: "55px",
-                                                                            height: "55px",
-                                                                            marginRight:
-                                                                                "10px",
-                                                                            fontSize:
-                                                                                "10px"
-                                                                        }}
-                                                                    >
-                                                                        No Foto
-                                                                    </div>
-                                                                )}
+                                                                    </span>
+                                                                </div>
+                                                            )
+                                                        )}
 
-                                                                <strong>
-                                                                    {
-                                                                        produk.judul
-                                                                    }
-                                                                </strong>
-                                                            </div>
-                                                        </td>
+                                                    {item.produk
+                                                        ?.length >
+                                                        2 && (
+                                                        <small>
+                                                            +
+                                                            {item
+                                                                .produk
+                                                                .length -
+                                                                2}{" "}
+                                                            produk
+                                                            lainnya
+                                                        </small>
+                                                    )}
+                                                </div>
+                                            </td>
 
-                                                        <td>
-                                                            Rp.{" "}
-                                                            {Number(
-                                                                produk.harga
-                                                            ).toLocaleString(
-                                                                "id-ID"
-                                                            )}
-                                                        </td>
+                                            <td>
+                                                <span className="tanggal">
+                                                    {item.tanggal}
+                                                </span>
+                                            </td>
 
-                                                        <td>
-                                                            {
-                                                                produk.jumlah
-                                                            }
-                                                        </td>
+                                            <td>
+                                                <strong className="harga">
+                                                    Rp{" "}
+                                                    {Number(
+                                                        item.total
+                                                    ).toLocaleString(
+                                                        "id-ID"
+                                                    )}
+                                                </strong>
+                                            </td>
 
-                                                        <td>
-                                                            <strong>
-                                                                Rp.{" "}
-                                                                {(
-                                                                    Number(
-                                                                        produk.harga
-                                                                    ) *
-                                                                    Number(
-                                                                        produk.jumlah
-                                                                    )
-                                                                ).toLocaleString(
-                                                                    "id-ID"
-                                                                )}
-                                                            </strong>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            )}
-                                    </tbody>
-                                </table>
-                            </div>
+                                            <td>
+                                                <span
+                                                    className={`metode ${item.metode?.toLowerCase()}`}
+                                                >
+                                                    {item.metode}
+                                                </span>
+                                            </td>
 
-                            <div className="row mt-3">
-                                <div className="col-md-6">
-                                    <p className="mb-2">
-                                        <strong>
-                                            Metode Pembayaran:
-                                        </strong>{" "}
-                                        {item.metode}
-                                    </p>
+                                            <td>
+                                                <span className="status">
+                                                    ● Selesai
+                                                </span>
+                                            </td>
 
-                                    <p className="mb-2">
-                                        <strong>
-                                            Uang Dibayar:
-                                        </strong>{" "}
-                                        Rp.{" "}
-                                        {Number(
-                                            item.bayar
-                                        ).toLocaleString(
-                                            "id-ID"
-                                        )}
-                                    </p>
+                                            <td>
+                                                <div className="aksi">
+                                                    <button
+                                                        className="btn-detail"
+                                                        onClick={() =>
+                                                            bukaNota(
+                                                                item
+                                                            )
+                                                        }
+                                                    >
+                                                        Lihat
+                                                    </button>
 
-                                    <p className="mb-2">
-                                        <strong>
-                                            Kembalian:
-                                        </strong>{" "}
-                                        Rp.{" "}
-                                        {Number(
-                                            item.kembalian
-                                        ).toLocaleString(
-                                            "id-ID"
-                                        )}
-                                    </p>
-                                </div>
-
-                                <div className="col-md-6 text-md-end">
-                                    <h5>
-                                        Total: Rp.{" "}
-                                        {Number(
-                                            item.total
-                                        ).toLocaleString(
-                                            "id-ID"
-                                        )}
-                                    </h5>
-                                </div>
-                            </div>
-
-                            <div className="text-end mt-3">
-                                <button
-                                    className="btn btn-danger"
-                                    onClick={() =>
-                                        hapusTransaksi(
-                                            item.id_transaksi
-                                        )
-                                    }
-                                >
-                                    Hapus Transaksi
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ))
-            )}
+                                                    <button
+                                                        className="btn-hapus"
+                                                        onClick={() =>
+                                                            hapusTransaksi(
+                                                                item.id_transaksi
+                                                            )
+                                                        }
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                )
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 }
