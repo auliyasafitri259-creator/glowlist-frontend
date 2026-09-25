@@ -1,0 +1,431 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f2ff;
+}
+
+.register-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background: linear-gradient(
+        135deg,
+        #f1edff,
+        #ffffff
+    );
+}
+
+.register-card {
+    width: 820px;
+    max-width: 100%;
+    min-height: 500px;
+
+    display: flex;
+
+    overflow: hidden;
+
+    border-radius: 25px;
+
+    background: white;
+
+    box-shadow:
+        0 20px 55px rgba(110, 80, 190, 0.15);
+}
+
+/* =========================
+   KIRI LOGO
+========================= */
+
+.register-logo-side {
+    width: 43%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ded5fa,
+            #eeeaff,
+            #d8cdf8
+        );
+}
+
+.register-logo-side::before {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    right: -210px;
+    bottom: -170px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.register-logo-side::after {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 150px;
+
+    left: -150px;
+    top: -50px;
+
+    transform: rotate(-25deg);
+
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* LOGO */
+
+.register-logo {
+    position: relative;
+    z-index: 2;
+
+    text-align: center;
+}
+
+/* DAUN */
+
+.register-leaf {
+    position: relative;
+
+    width: 90px;
+    height: 75px;
+
+    margin: 0 auto 8px;
+}
+
+.register-leaf-left {
+    position: absolute;
+
+    width: 42px;
+    height: 63px;
+
+    left: 7px;
+    top: 7px;
+
+    background: linear-gradient(
+        135deg,
+        #7352c5,
+        #9b7de0
+    );
+
+    border-radius:
+        8px 40px 8px 40px;
+
+    transform: rotate(-25deg);
+}
+
+.register-leaf-right {
+    position: absolute;
+
+    width: 50px;
+    height: 72px;
+
+    right: 4px;
+    top: 0;
+
+    background: linear-gradient(
+        135deg,
+        #7654c9,
+        #a087e5
+    );
+
+    border-radius:
+        40px 8px 40px 8px;
+
+    transform: rotate(18deg);
+}
+
+.register-leaf::after {
+    content: "";
+
+    position: absolute;
+
+    width: 4px;
+    height: 48px;
+
+    left: 43px;
+    top: 21px;
+
+    background: white;
+
+    border-radius: 10px;
+
+    transform: rotate(32deg);
+
+    z-index: 3;
+}
+
+.register-logo h1 {
+    margin: 0;
+
+    color: #6949b8;
+
+    font-size: 48px;
+
+    font-weight: 700;
+
+    letter-spacing: -3px;
+
+    line-height: 1;
+}
+
+.register-logo p {
+    margin: 13px 0 0;
+
+    color: #7e72a2;
+
+    font-size: 13px;
+
+    letter-spacing: 1.5px;
+}
+
+/* =========================
+   KANAN FORM
+========================= */
+
+.register-form-side {
+    width: 57%;
+
+    padding: 50px 55px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background: white;
+}
+
+/* JUDUL */
+
+.register-title {
+    margin-bottom: 25px;
+}
+
+.register-title h2 {
+    margin: 0;
+
+    color: #343247;
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+.register-title h2 span {
+    color: #8060d6;
+}
+
+.register-title p {
+    margin: 9px 0 0;
+
+    color: #8d89a5;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+/* INPUT */
+
+.register-input {
+    margin-bottom: 16px;
+}
+
+.register-input label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #68657b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.register-input input {
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 15px;
+
+    border: 1.5px solid #ddd6f5;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: white;
+
+    color: #4b4860;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.register-input input:focus {
+    border-color: #8c6add;
+
+    box-shadow:
+        0 0 0 4px rgba(140, 106, 221, 0.1);
+}
+
+.register-input input::placeholder {
+    color: #b9b4ca;
+}
+
+/* BUTTON */
+
+.register-button {
+    width: 100%;
+
+    height: 50px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8060d6,
+            #a27fe9
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 18px rgba(128, 96, 214, 0.25);
+
+    transition: 0.2s;
+}
+
+.register-button:hover {
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(
+            90deg,
+            #7050c5,
+            #916edb
+        );
+}
+
+/* LOGIN */
+
+.already-account {
+    margin-top: 22px;
+
+    text-align: center;
+
+    color: #aaa7ba;
+
+    font-size: 13px;
+}
+
+.already-account button {
+    margin-left: 5px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #805ed5;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.already-account button:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .register-card {
+        width: 450px;
+
+        display: block;
+    }
+
+    .register-logo-side {
+        width: 100%;
+
+        min-height: 250px;
+
+        padding: 30px;
+    }
+
+    .register-logo h1 {
+        font-size: 40px;
+    }
+
+    .register-form-side {
+        width: 100%;
+
+        padding: 35px 30px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .register-page {
+        padding: 10px;
+    }
+
+    .register-logo-side {
+        min-height: 230px;
+    }
+
+    .register-form-side {
+        padding: 30px 20px;
+    }
+
+    .register-title h2 {
+        font-size: 27px;
+    }
+}

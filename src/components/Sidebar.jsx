@@ -13,6 +13,9 @@ export default function Sidebar() {
                 <li className="nav-item">
                     <Link to="/About" className="btn btn-link text-start w-100">About Me</Link>
                 </li>
+                 <li className="nav-item">
+                    <Link to="/Transaksi" className="btn btn-link text-start w-100">Transaksi</Link>
+                </li>
             </ul>
         </div>
     )

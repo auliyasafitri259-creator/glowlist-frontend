@@ -26,9 +26,9 @@ export default function EditProduk() {
                 setFormData(dataProduk[0])
 
                 //Ambil data kategori
-                const resKategi = await fetch("http://localhost:3001/kategori");
+                const resKategori = await fetch("http://localhost:3001/kategori");
 
-                const dataKategori = await resKategi.json()
+                const dataKategori = await resKategori.json()
                 setKategori(dataKategori)
 
                 setLoading(false)

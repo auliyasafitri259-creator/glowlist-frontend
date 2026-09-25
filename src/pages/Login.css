@@ -1,0 +1,423 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f2ff;
+}
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+
+    background: linear-gradient(
+        135deg,
+        #f1edff,
+        #ffffff
+    );
+}
+
+.login-card {
+    width: 820px;
+    max-width: 100%;
+    min-height: 500px;
+
+    display: flex;
+
+    overflow: hidden;
+
+    border-radius: 25px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 20px 55px rgba(110, 80, 190, 0.15);
+}
+
+/* =================================
+   KIRI - LOGO
+================================= */
+
+.logo-side {
+    width: 43%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ded5fa,
+            #eeeaff,
+            #d8cdf8
+        );
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.logo-side::before {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+
+    right: -210px;
+    bottom: -170px;
+
+    background: rgba(255,255,255,0.3);
+}
+
+.logo-side::after {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 150px;
+
+    left: -150px;
+    top: -50px;
+
+    transform: rotate(-25deg);
+
+    background: rgba(255,255,255,0.3);
+}
+
+/* LOGO */
+
+.glowlist-logo {
+    position: relative;
+    z-index: 2;
+
+    text-align: center;
+}
+
+/* DAUN */
+
+.glowlist-leaf {
+    position: relative;
+
+    width: 90px;
+    height: 75px;
+
+    margin: 0 auto 8px;
+}
+
+.leaf-left {
+    position: absolute;
+
+    width: 42px;
+    height: 63px;
+
+    left: 7px;
+    top: 7px;
+
+    background: linear-gradient(
+        135deg,
+        #7352c5,
+        #9b7de0
+    );
+
+    border-radius:
+        8px 40px 8px 40px;
+
+    transform: rotate(-25deg);
+}
+
+.leaf-right {
+    position: absolute;
+
+    width: 50px;
+    height: 72px;
+
+    right: 4px;
+    top: 0;
+
+    background: linear-gradient(
+        135deg,
+        #7654c9,
+        #a087e5
+    );
+
+    border-radius:
+        40px 8px 40px 8px;
+
+    transform: rotate(18deg);
+}
+
+/* GARIS DAUN */
+
+.glowlist-leaf::after {
+    content: "";
+
+    position: absolute;
+
+    width: 4px;
+    height: 48px;
+
+    left: 43px;
+    top: 21px;
+
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    transform: rotate(32deg);
+
+    z-index: 3;
+}
+
+/* NAMA LOGO */
+
+.glowlist-logo h1 {
+    margin: 0;
+
+    color: #6949b8;
+
+    font-size: 48px;
+
+    font-weight: 700;
+
+    letter-spacing: -3px;
+
+    line-height: 1;
+}
+
+/* TAGLINE */
+
+.glowlist-logo p {
+    margin: 13px 0 0;
+
+    color: #7e72a2;
+
+    font-size: 13px;
+
+    letter-spacing: 1.5px;
+}
+
+/* =================================
+   KANAN - LOGIN
+================================= */
+
+.login-side {
+    width: 57%;
+
+    padding: 55px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background: #ffffff;
+}
+
+/* JUDUL */
+
+.login-title {
+    margin-bottom: 30px;
+}
+
+.login-title h2 {
+    margin: 0;
+
+    color: #343247;
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+.login-title h2 span {
+    color: #8060d6;
+}
+
+.login-title p {
+    margin: 10px 0 0;
+
+    color: #8d89a5;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+/* INPUT */
+
+.input-box {
+    margin-bottom: 19px;
+}
+
+.input-box label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #68657b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.input-box input {
+    width: 100%;
+    height: 52px;
+
+    padding: 0 16px;
+
+    border: 1.5px solid #ddd6f5;
+
+    border-radius: 13px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #4b4860;
+
+    font-size: 14px;
+}
+
+.input-box input:focus {
+    border-color: #8c6add;
+
+    box-shadow:
+        0 0 0 4px rgba(140,106,221,0.1);
+}
+
+.input-box input::placeholder {
+    color: #b9b4ca;
+}
+
+/* BUTTON */
+
+.login-button {
+    width: 100%;
+    height: 52px;
+
+    margin-top: 5px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: linear-gradient(
+        90deg,
+        #8060d6,
+        #a27fe9
+    );
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 18px rgba(128,96,214,0.25);
+}
+
+.login-button:hover {
+    background: linear-gradient(
+        90deg,
+        #7050c5,
+        #916edb
+    );
+}
+
+/* REGISTER */
+
+.register {
+    margin-top: 24px;
+
+    text-align: center;
+
+    color: #aaa7ba;
+
+    font-size: 13px;
+}
+
+.register button {
+    margin-left: 5px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #805ed5;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.register button:hover {
+    text-decoration: underline;
+}
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 700px) {
+
+    .login-card {
+        width: 450px;
+
+        display: block;
+    }
+
+    .logo-side {
+        width: 100%;
+        min-height: 270px;
+
+        padding: 35px;
+    }
+
+    .glowlist-logo h1 {
+        font-size: 40px;
+    }
+
+    .login-side {
+        width: 100%;
+
+        padding: 35px 30px;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .login-page {
+        padding: 10px;
+    }
+
+    .logo-side {
+        min-height: 240px;
+    }
+
+    .login-side {
+        padding: 30px 20px;
+    }
+
+    .login-title h2 {
+        font-size: 27px;
+    }
+}
